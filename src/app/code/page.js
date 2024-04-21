@@ -2,12 +2,12 @@
 import { submitOtpStudent } from '@/redux/actions/userAction';
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-function code() {
+function Code() {
     const [inputs, setInputs] = useState(['', '', '', '']);
     const inputRefs = useRef([]);
     const router = useRouter();
@@ -20,7 +20,7 @@ function code() {
 
     useEffect(() => {
         if (user) {
-          router.push("/") 
+          redirect('/login')
         }
     }, [user]);
 
@@ -135,10 +135,10 @@ function code() {
                     </button>
                 </div>
             </form>
-            <div className="text-sm text-slate-500 mt-4">Didn't receive code? <a href="#0" className="font-medium text-indigo-500 hover:text-indigo-600">Resend</a></div>
+        
         </div>
         </div>
     );
 }
 
-export default code;
+export default Code;

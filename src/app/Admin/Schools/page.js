@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import Layout from "@/app/components/Admin/Layout";
 import axios from "../../../../axiosconfig"
+import Image from "next/image";
 
 const sampleUsers = [
     {
@@ -114,7 +115,6 @@ const data = [
 
 function Schools() {
   const [schools,setschools] = useState();
-  const [searchTerm,setSearchTerm] = useState("");
 
   const config = () => {
     return {
@@ -133,7 +133,7 @@ useEffect(() => {
       console.log(response.data.schools)
     };
    searchUsers();
-}, [searchTerm]); 
+}, []); 
   return (
     <Layout>
       <>
@@ -148,7 +148,7 @@ useEffect(() => {
             <div id="right-dashboard">
               <div className="nav flex items-center justify-between w-full py-4 px-6 border-b-2 border-gray-200 	">
                 <div className="left flex items-center gap-3">
-                  <img
+                  <Image
                     className="h-[40px]"
                     src="/images/tcps logo.jpeg"
                     alt=""

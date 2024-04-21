@@ -15,6 +15,7 @@ import { MdOutlineRoundaboutLeft } from "react-icons/md";
 import { IoCartOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser } from "@/redux/actions/userAction";
+import Image from "next/image";
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
@@ -326,7 +327,7 @@ const Nav = () => {
           <div className="wrapper relative">
             <div className="logo">
               <Link href={"/"}>
-                <img src={"/idcordlogo.jpg"} className="w-[100px]" alt="logo" />
+                <Image  src={"/idcordlogo.jpg"} className="w-[100px]" alt="logo" />
               </Link>
             </div>
             <ul className="nav-links flex gap-4 ">
@@ -457,10 +458,11 @@ const Nav = () => {
               aria-label="Sidebar"
             >
               <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 bg-[#FEFAF6]">
-                <img
+                <Image
+                alt="logo"
                   className="w-[120px] mx-auto"
                   src="/idcordlogo.jpg"
-                ></img>
+                ></Image>
                 <ul className="space-y-2 font-medium  py-[20px]">
                   {user?.isAdmin && (
                     <li>

@@ -1,14 +1,16 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useEffect, useState } from "react"
 import { LiaCitySolid } from "react-icons/lia";
 import { FaRegBuilding } from "react-icons/fa";
 import { IoIosContact } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from '@/redux/actions/userAction';
 import Link from 'next/link';
+import Image from 'next/image';
 
-const signup = () => {
+const Signup = () => {
 
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
@@ -28,9 +30,9 @@ const signup = () => {
   useEffect(() => {
     if (user) {
       if(user?.isAdmin){
-        router.push("/") 
+        redirect("/") 
       }
-      router.push("/") 
+      redirect('/')
     }
   }, [user]);  
 
@@ -67,7 +69,7 @@ const signup = () => {
     <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
       <form className="w-full max-w-md " onSubmit={SubmitForm}>
         <div className="flex justify-center mx-auto">
-          <img
+          <Image
             className="w-auto h-16 sm:h-8"
             src="/idcordlogo.jpg"
             alt=""
@@ -287,4 +289,4 @@ const signup = () => {
   )
 }
 
-export default signup
+export default Signup

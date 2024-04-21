@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { loginUser } from "@/redux/actions/userAction";
 import Link from "next/link";
+import Image from "next/image";
 
 
-const signin = () => {
+const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
 
@@ -19,9 +20,9 @@ const signin = () => {
     console.log(user)
     if (user) {
       if(user?.isAdmin){
-        router.push("/Admin/Dashbord") 
+        redirect("/Admin/Dashbord") 
       }
-      router.push("/") 
+      redirect("/") 
     }
   }, [user]);
 
@@ -43,7 +44,7 @@ const signin = () => {
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <img
+            <Image
               className=" h-20 mr-2"
               src="/idcordlogo.jpg"
               alt="logo"
@@ -121,4 +122,4 @@ const signin = () => {
   );
 };
 
-export default signin;
+export default Signin;

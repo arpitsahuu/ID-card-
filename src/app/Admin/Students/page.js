@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/app/components/Admin/Layout";
 import axios from "../../../../axiosconfig";
+import Image from "next/image";
 
 function Students() {
   const [students, setStudents] = useState([]);
@@ -34,7 +35,7 @@ function Students() {
           <div id="right-dashboard">
             <div className="nav flex items-center justify-between w-full py-4 px-6 border-b-2 border-gray-200">
               <div className="left flex items-center gap-3">
-                <img className="h-[40px]" src="/images/tcps logo.jpeg" alt="" />
+                <Image className="h-[40px]" src="/images/tcps logo.jpeg" alt="" />
                 <h1 className="font-semibold"> Students</h1>
               </div>
             </div>

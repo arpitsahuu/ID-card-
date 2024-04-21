@@ -18,6 +18,7 @@ import {
   Bar,
 } from "recharts";
 import Layout from "@/app/components/Admin/Layout";
+import Image from "next/image";
 
 const data = [
   { date: "Day 1", users: 10, productsSold: 5 },
@@ -43,7 +44,7 @@ function Dashboard() {
             <div id="right-dashboard">
               <div className="nav flex items-center justify-between w-full py-4 px-6 border-b-2 border-gray-200 	">
                 <div className="left flex items-center gap-3">
-                  <img
+                  <Image
                     className="h-[40px]"
                     src="/images/tcps logo.jpeg"
                     alt=""

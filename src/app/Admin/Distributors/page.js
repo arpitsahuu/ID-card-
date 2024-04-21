@@ -18,6 +18,7 @@ import {
   Bar,
 } from "recharts";
 import Layout from "@/app/components/Admin/Layout";
+import Image from "next/image";
 
 const sampleUsers = [
   {
@@ -113,7 +114,6 @@ const data = [
 
 function Distributors() {
   const [users,setUsers] = useState();
-  const [searchTerm,setSearchTerm] = useState("");
 
   const config = () => {
     return {
@@ -131,8 +131,14 @@ const searchUsers = async () => {
 };
 
 useEffect(() => {
+  const searchUsers = async () => {
+    const response = await axios.post(`/admin/users`, null, config()
+    );
+    setUsers(response.data.users);
+    console.log(response.data.users)
+  };
    searchUsers();
-}, [searchTerm]); 
+}, []); 
 
 const DeletUser = async (id) =>{
   const response = await axios.post(`${basePath}/admin/delete/user/${id}`, null, config()
@@ -153,7 +159,7 @@ const ChageExcelfile = async (id) =>{
             <div id="right-dashboard">
               <div className="nav flex items-center justify-between w-full py-4 px-6 border-b-2 border-gray-200 	">
                 <div className="left flex items-center gap-3">
-                  <img
+                  <Image
                     className="h-[40px]"
                     src="/images/tcps logo.jpeg"
                     alt=""

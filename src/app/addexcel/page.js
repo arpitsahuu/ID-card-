@@ -5,7 +5,7 @@ import { FaRegAddressCard } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Nav from "../components/Nav";
 
-const addexcel = () => {
+const Addexcel = () => {
   const { schools, error } = useSelector((state) => state.user);
   const [currSchool, setCurrSchool] = useState();
   let currRole = null ;
@@ -157,4 +157,4 @@ const addexcel = () => {
   );
 };
 
-export default addexcel;
+export default Addexcel;

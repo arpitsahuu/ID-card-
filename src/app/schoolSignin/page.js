@@ -1,6 +1,7 @@
+import Image from 'next/image'
 import React from 'react'
 
-const schoolSignin = () => {
+const SchoolSignin = () => {
   return (
     <>
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -9,7 +10,7 @@ const schoolSignin = () => {
       href="#"
       className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
     >
-      <img
+      <Image
         className="w-8 h-8 mr-2"
         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
         alt="logo"
@@ -106,4 +107,4 @@ const schoolSignin = () => {
   )
 }
 
-export default schoolSignin
+export default SchoolSignin

@@ -31,6 +31,16 @@ const Limit = ({ params }) => {
   };
 
   useEffect(() => {
+    const searchUser = async () => {
+      const id = params ? params.id : null;
+      if (id) {
+        const response = await axios.post(`/admin/get/user/${id}`, null, config());
+        setUser(response.data.user);
+        setSchoolLimit(response.data.user.schoolLimit);
+        setStudentLimit(response.data.user.studentLimit);
+        setStaffLimit(response.data.user.staffLimit);
+      }
+    };
     searchUser();
   }, [params]);
 
