@@ -52,7 +52,7 @@ export default function Home() {
             <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
               School Signin
             </button>
-            <Link href={"/signin"} className="ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">
+            <Link href={"/Signin"} className="ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">
               Signin
             </Link>
           </div>
@@ -62,6 +62,8 @@ export default function Home() {
             className="object-cover object-center rounded"
             alt="hero"
             src="/mainbf.avif"
+            height={500}
+            width={500}
           />
         </div>
       </div>
@@ -77,7 +79,8 @@ export default function Home() {
           <div className="xl:w-1/3 md:w-1/2 p-4" onClick={redirectToAddSchool}>
             <div className="border border-gray-300 p-6 rounded-lg"  >
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
-                <Image src="/Add School.PNG" alt="" />
+                <Image height={50}
+                width={50}src="/Add School.PNG" alt="" />
               </div>
               <h2 className="text-lg text-gray-900 font-medium title-font mb-2">
                 Add School

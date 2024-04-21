@@ -86,6 +86,8 @@ const Navbar = () => {
                         className="h-8 w-8"
                         src="/idcordlogo.jpg"
                         alt=""
+                        height={50}
+                        width={50}
                       />
                     </Menu.Button>
                   </div>

@@ -327,7 +327,9 @@ const Nav = () => {
           <div className="wrapper relative">
             <div className="logo">
               <Link href={"/"}>
-                <Image  src={"/idcordlogo.jpg"} className="w-[100px]" alt="logo" />
+                <Image  src={"/idcordlogo.jpg"} className="w-[100px]"
+                height={50}
+                width={50} alt="logo" />
               </Link>
             </div>
             <ul className="nav-links flex gap-4 ">
@@ -460,6 +462,8 @@ const Nav = () => {
               <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 bg-[#FEFAF6]">
                 <Image
                 alt="logo"
+                height={50}
+                width={50}
                   className="w-[120px] mx-auto"
                   src="/idcordlogo.jpg"
                 ></Image>

@@ -65,11 +65,6 @@ const ChangeLimits = () => {
             <div id="right-dashboard">
               <div className="nav flex items-center justify-between w-full py-4 px-6 border-b-2 border-gray-200 	">
                 <div className="left flex items-center gap-3">
-                  <Image
-                    className="h-[40px]"
-                    src="/images/tcps logo.jpeg"
-                    alt=""
-                  />
                   <h1 className="font-semibold"> Distributers List</h1>
                 </div>
               </div>
