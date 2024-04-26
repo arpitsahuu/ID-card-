@@ -192,8 +192,8 @@ const ChageExcelfile = async (id) =>{
                       >
                         <td className="py-2 px-4 text-center text-nowrap">{`${e?.name}`}</td>
                         <td className="py-2 px-4 text-center">{e?.email}</td>
-                        <td className="py-2 px-4 text-center">{e?.city}</td>
                         <td className="py-2 px-4 text-center">{e?.contact}</td>
+                        <td className="py-2 px-4 text-center">{e?.city}</td>
                         <td className="py-2 px-4 text-center text-nowrap">{e?.district}</td>
                         <td className="py-2 px-4 text-center text-nowrap">{e?.state}</td>
                         <td className="py-2 px-4 text-center text-nowrap">

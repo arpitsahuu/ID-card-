@@ -25,14 +25,35 @@ export default function Home() {
     if(!user){
       router.push("./signin");
     }
-    router.push("/addschool")
+    router.push("/Addschool")
+  }
+
+  const redirectToSchools = () =>{
+    if(!user){
+      router.push("./signin");
+    }
+    router.push("/SchoolList")
+  }
+
+  const redirectToAdddata = () =>{
+    if(!user){
+      router.push("./signin");
+    }
+    router.push("/Adddata")
   }
 
   const redirectToExcel = () =>{
     if(user){
-      router.push("/addeccel")
+      router.push("./signin");
     }
-    router.push("./signin");
+    router.push("/Addexcel")
+  }
+
+  const redirectToViewData = () =>{
+    if(user){
+      router.push("./signin");
+    }
+    router.push("/Viewdata")
   }
   return (
     <>
@@ -49,11 +70,11 @@ export default function Home() {
           Welcome to our school ID card printing website. Easily create customized ID cards for students, faculty, and staff. Enhance security and foster belonging with our hassle-free solution. Join us in empowering education, one ID at a time.
           </p>
           <div className="flex justify-center">
-            <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-              School Signin
-            </button>
-            <Link href={"/signin"} className="ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">
-              Signin
+            <Link href={"/SchoolSigin"} className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+              School Sign in
+            </Link>
+            <Link href={"/Signin"} className="ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">
+              Sign in
             </Link>
           </div>
         </div>
@@ -68,6 +89,7 @@ export default function Home() {
         </div>
       </div>
     </section>
+    { user &&
     <section className="text-gray-700 body-font border-t border-gray-200">
       <div className="container px-5 py-24 mx-auto">
         <div className="flex flex-wrap w-full mb-20 flex-col items-center text-center">
@@ -76,6 +98,7 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex flex-wrap -m-4">
+          { user?.role != "school" &&
           <div className="xl:w-1/3 md:w-1/2 p-4" onClick={redirectToAddSchool}>
             <div className="border border-gray-300 p-6 rounded-lg"  >
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
@@ -91,8 +114,10 @@ export default function Home() {
               </p>
             </div>
           </div>
+          }
+          { user?.role != "school" &&
           <div className="xl:w-1/3 md:w-1/2 p-4">
-            <div className="border border-gray-300 p-6 rounded-lg">
+            <div className="border border-gray-300 p-6 rounded-lg" onClick={redirectToSchools}>
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
                 <svg
                   fill="none"
@@ -109,7 +134,7 @@ export default function Home() {
                 </svg>
               </div>
               <h2 className="text-lg text-gray-900 font-medium title-font mb-2">
-                School
+                Schools
               </h2>
               <p className="leading-relaxed text-base">
                 Fingerstache flexitarian street art 8-bit waist co, subway tile
@@ -117,8 +142,10 @@ export default function Home() {
               </p>
             </div>
           </div>
+          }
+          { user?.role != "school" &&
           <div className="xl:w-1/3 md:w-1/2 p-4">
-            <div className="border border-gray-300 p-6 rounded-lg">
+            <div className="border border-gray-300 p-6 rounded-lg" onClick={redirectToExcel}>
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
                 <svg
                   fill="none"
@@ -142,8 +169,10 @@ export default function Home() {
               </p>
             </div>
           </div>
+          }
+
           <div className="xl:w-1/3 md:w-1/2 p-4">
-            <div className="border border-gray-300 p-6 rounded-lg">
+            <div className="border border-gray-300 p-6 rounded-lg" onClick={redirectToAdddata}>
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
               <svg
                   fill="none"
@@ -168,7 +197,7 @@ export default function Home() {
             </div>
           </div>
           <div className="xl:w-1/3 md:w-1/2 p-4">
-            <div className="border border-gray-300 p-6 rounded-lg">
+            <div className="border border-gray-300 p-6 rounded-lg" onClick={redirectToViewData}>
               <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
                 <svg
                   fill="none"
@@ -191,33 +220,11 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="xl:w-1/3 md:w-1/2 p-4">
-            <div className="border border-gray-300 p-6 rounded-lg">
-              <div className="w-10 h-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  className="w-6 h-6"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </div>
-              <h2 className="text-lg text-gray-900 font-medium title-font mb-2">
-                Help & Support
-              </h2>
-              <p className="leading-relaxed text-base">
-                Fingerstache flexitarian street art 8-bit waist co, subway tile
-                poke farm.
-              </p>
-            </div>
-          </div>
+
         </div>
       </div>
-    </section>
+    </section>   
+    }
     <section className="text-gray-700 body-font border-t border-gray-200">
       <div className="container px-5 py-24 mx-auto">
         <div className="xl:w-1/2 lg:w-3/4 w-full mx-auto text-center">

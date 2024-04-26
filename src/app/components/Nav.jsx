@@ -139,8 +139,8 @@ const Nav = () => {
           }
           .mega-box {
             position: absolute;
-            left: 0;
-            width: 100%;
+            right: 0;
+            width: 50%;
             padding: 0 30px;
             top: 85px;
             opacity: 0;
@@ -372,16 +372,22 @@ const Nav = () => {
                 </Link>
               </li> */}
               <li>
+                { user && user?.role != "school" &&
                 <Link
                   href="#"
                   className="desktop-item font-semibold hover:bg-blue-700 hover:text-white rounded-lg py-1.5 px-3 cursor-pointer"
                 >
                   Features
                 </Link>
+                 }
+                 { user && user?.role != "school" &&
                 <input type="checkbox" id="showMega" />
+                 }
+                 { user && user?.role != "school" &&
                 <label htmlFor="showMega" className="mobile-item ">
                   Features
                 </label>
+                 }
                 <div className="mega-box">
                   <div className="content">
                     {/* <div className="row">
@@ -394,10 +400,10 @@ const Nav = () => {
                       <header>School</header>
                       <ul className="mega-links pe-5">
                         <li>
-                          <Link href="#">Add School</Link>
+                          <Link href="/Addschool">Add School</Link>
                         </li>
                         <li>
-                          <Link href="#">School List</Link>
+                          <Link href="/SchoolList">School List</Link>
                         </li>
                       </ul>
                     </div>
@@ -405,10 +411,10 @@ const Nav = () => {
                       <header>Add Data</header>
                       <ul className="mega-links">
                         <li>
-                          <Link href="#">Add Student</Link>
+                          <Link href="/Adddata">Add Student</Link>
                         </li>
                         <li>
-                          <Link href="#">Import Data</Link>
+                          <Link href="Addexcel">Import Data</Link>
                         </li>
                       </ul>
                     </div>
@@ -416,11 +422,9 @@ const Nav = () => {
                       <header>Other</header>
                       <ul className="mega-links">
                         <li>
-                          <Link href="#">View Data</Link>
+                          <Link href="Viewdata">View Data</Link>
                         </li>
-                        <li>
-                          <Link href="#">Help & Support</Link>
-                        </li>
+
                       </ul>
                     </div>
                   </div>
@@ -439,11 +443,6 @@ const Nav = () => {
               )}
             </ul>
             <div className="md:hidden flex items-center gap-2">
-              <FaCartShopping
-                onClick={() => setOpen((e) => !e)}
-                className=""
-                size={20}
-              />
               <GiHamburgerMenu
                 className="text-xl"
                 onClick={() => setSidebarOpen((e) => !e)}

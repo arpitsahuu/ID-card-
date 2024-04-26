@@ -7,7 +7,7 @@ export const userSlice = createSlice({
         loading: false,
         error: null,
         user: null,
-        schools: [],
+        schools: null,
         students: [],
         staffs:[],
     },

@@ -29,6 +29,7 @@ export const currentUser = (userData) => async (dispatch) => {
     }
     const response = await axios.post(`/user/curr`, {}, config());
     dispatch(setUser(response?.data?.user));
+    dispatch(currentSchool());
   } catch (error) {
     dispatch(
       setError(error?.response?.data?.message || "Failed to get current user")
@@ -37,6 +38,7 @@ export const currentUser = (userData) => async (dispatch) => {
     dispatch(setLoading(false));
   }
 };
+
 export const currentSchool = (userData) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
@@ -44,8 +46,9 @@ export const currentSchool = (userData) => async (dispatch) => {
     if (!token) {
       return;
     }
-    const response = await axios.post(`/user/curr`, {}, config());
-    dispatch(setUser(response?.data?.user));
+    const response = await axios.post(`/user/schools`, {}, config());
+    console.log(response?.data?.schools)
+    dispatch(setSchools(response?.data?.schools));
   } catch (error) {
     dispatch(
       setError(error?.response?.data?.message || "Failed to get current user")
@@ -60,6 +63,42 @@ export const loginUser = (userData) => async (dispatch) => {
     dispatch(setLoading(true));
     console.log(userData)
     const response = await axios.post(`/user/login`, {
+      ...userData,
+    });
+    console.log(response)
+    localStorage.removeItem("token");
+    localStorage.setItem("token", response.data.token);
+    dispatch(currentUser());
+  } catch (error) {
+    let errorMessage = "Login failed"; // Default error message
+
+    if (error?.response?.status === 500) {
+      // 401 is the standard code for unauthorized
+      errorMessage = "Wrong password provided. Please try again.";
+    } else if (error?.response?.data?.message) {
+      errorMessage = error.response.data.message; // Server-provided error message
+    }
+
+    toast.error(errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    dispatch(setError(error?.response?.data?.message || "Login failed"));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const loginSchool = (userData) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    console.log(userData)
+    const response = await axios.post(`/user/school/login`, {
       ...userData,
     });
     console.log(response)
@@ -181,6 +220,7 @@ export const logoutUser = (userData) => async (dispatch) => {
     dispatch(setLoading(false));
     dispatch(setUser(null));
     localStorage.removeItem("token");
+    dispatch(setSchools([]));
   } catch (error) {
     dispatch(setLoading(false));
     dispatch(
@@ -197,6 +237,7 @@ export const addSchool = (userData) => async (dispatch) => {
       ...userData, 
     },config());
     dispatch(setLoading(false));
+    dispatch(currentSchool())
     console.log(response.data)
     if (response?.data?.succcess) {
       return response.data.message;
@@ -229,68 +270,34 @@ export const updateStudent = (userData) => async (dispatch) => {
   }
 };
 
-
-
-export const uploadResuma = (fileData) => async (dispatch) => {
+export const addStudent = (studntData,id) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const formData = new FormData();
-    formData.append("resume", fileData);
-    const { data } = await axios.post(
-      `${basePath}/student/resumaPdf`,
-      formData,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    dispatch(currentStudent());
+    const response = await axios.post(`/user/registration/student/${id}`, {
+      ...studntData, 
+    },config());
     dispatch(setLoading(false));
+    return response.data.message;
   } catch (error) {
     dispatch(setLoading(false));
-    console.error(error,);
     dispatch(
-      setError(error?.response?.data?.message || "fail to upload Resume")
+      setError(error?.response?.data?.message || "registerStudent failed")
     );
   }
 };
 
-export const sendMail = (email) => async (dispatch) => {
+export const addStaff = (staffData,id) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const { data } = await axios.post(
-      `${basePath}/student/send-mail`,
-      email,
-      config()
-    );
+    const response = await axios.post(`/user/registration/staff/${id}`, {
+      ...staffData, 
+    },config());
     dispatch(setLoading(false));
+    return response.data.message;
   } catch (error) {
     dispatch(setLoading(false));
-    console.error(error);
     dispatch(
-      setError(error?.response?.data?.message || "get current user failed")
-    );
-  }
-};
-
-export const resetPassword = (password, id) => async (dispatch) => {
-  if (!id) return;
-  try {
-    dispatch(setLoading(true));
-    const { data } = await axios.post(
-      `${basePath}/student/forget-link/${id}`,
-      { password },
-      config()
-    );
-    dispatch(setLoading(false));
-  } catch (error) {
-    dispatch(setLoading(false));
-    console.error(error);
-    dispatch(
-      setError(error?.response?.data?.message || "get current user failed")
+      setError(error?.response?.data?.message || "registerStudent failed")
     );
   }
 };
@@ -391,6 +398,144 @@ export const deletUser = (user) => async (dispatch) => {
     });
     dispatch(setLoading(false));
     toast.success("Deleted User")
+    
+  } catch (error) {
+    console.error(error);
+    dispatch(setLoading(false));
+    toast.error(errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    dispatch(
+      setError(
+        error?.response?.data?.message || "failed to upload a new avatar"
+      )
+    );
+  }
+};
+
+export const aadExcel = (fileData,schooId) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    console.log("student")
+    const formData = new FormData();
+    formData.append("file", fileData);
+    const response = await axios.post(
+      `/upload-excel/${schooId}`,
+      formData,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    dispatch(currentUser());
+    dispatch(setLoading(false));
+    return response.data.message;
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.error(error,);
+    dispatch(
+      setError(error?.response?.data?.message || "fail to upload Resume")
+    );
+  }
+};
+
+export const aadExcelstaff = (fileData,schooId) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    console.log("staff")
+    console.log(fileData)
+    const formData = new FormData();
+    formData.append("file", fileData);
+    console.log(formData)
+    const response = await axios.post(
+      `/upload-excel/staff/${schooId}`,
+      formData,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    dispatch(currentUser());
+    dispatch(setLoading(false));
+    return response.data.message;
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.error(error,);
+    dispatch(
+      setError(error?.response?.data?.message || "fail to upload Resume")
+    );
+  }
+};
+
+
+export const submitStudentPhotos = (fileData,schooId) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const formData = new FormData();
+    formData.append("file", fileData);
+    const response = await axios.post(
+      `/upload-excel/${schooId}`,
+      formData,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    dispatch(currentUser());
+    dispatch(setLoading(false));
+    return response.data.message;
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.error(error,);
+    dispatch(
+      setError(error?.response?.data?.message || "fail to upload Resume")
+    );
+  }
+};
+
+export const updateSchool = (userData,id) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const response = await axios.post(
+      `/user/edit/school/${id}`,
+      userData,
+      config()
+    );
+    dispatch(currentSchool());
+    dispatch(setLoading(false));
+    return response.data.message;
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.error(error);
+    dispatch(
+      setError(error?.response?.data?.message || "get current user failed")
+    );
+  }
+};
+
+
+export const deletSchool = (id) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const { data } = await axios.post(`user/delete/school/${id}`, null , config());
+    dispatch(setLoading(false));
+    dispatch(currentSchool())
+    toast.success("Deleted School")
     
   } catch (error) {
     console.error(error);

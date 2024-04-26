@@ -5,6 +5,8 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { loginUser } from "@/redux/actions/userAction";
 import Link from "next/link";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const Signin = () => {
@@ -37,7 +39,6 @@ const Signin = () => {
     }
     console.log(data)
     dispatch(loginUser(data));
-
   }
 
   return (
@@ -48,6 +49,8 @@ const Signin = () => {
               className=" h-20 mr-2"
               src="/idcordlogo.jpg"
               alt="logo"
+              height={50}
+              width={50}
             />
 
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -90,14 +93,14 @@ const Signin = () => {
                     onChange={(e) => setpassword(e.target.value)}
                   />
                 </div>
-                <div className="flex items-center justify-center">
+                {/* <div className="flex items-center justify-center">
                   <a
                     href="#"
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
                 <button
                   type="submit"
                   className="w-full text-white bg-primary-600 bg-indigo-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-sky-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -107,7 +110,7 @@ const Signin = () => {
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
                   <Link
-                    href="/signup"
+                    href="/Signup"
                     className="font-medium text-indigo-600 hover:underline dark:text-primary-500"
                   >
                     Sign up

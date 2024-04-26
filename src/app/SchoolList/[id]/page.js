@@ -1,72 +1,74 @@
-"use client";
-
-import React, { useState } from "react";
-import { RiContactsBook2Line } from "react-icons/ri";
-import { FaRegAddressCard } from "react-icons/fa";
-import Nav from "../components/Nav";
+"use client"
+import React, { useState, useEffect } from 'react';
+import Nav from '../../components/Nav';
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { addSchool } from "@/redux/actions/userAction";
+import { useDispatch, useSelector } from 'react-redux';
+import { currentUser, updateSchool } from '@/redux/actions/userAction';
+import { RiContactsBook2Line } from 'react-icons/ri';
+import { FaRegAddressCard } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddSchool = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [address, setAddress] = useState("");
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [requiredFields, setRequiredFields] = useState(["Student Name"]);
-  const [requiredFieldsStaff, setrequiredFieldsStaff] = useState(["Name"]);
+const EditSchool = ({ params }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
+  const [address, setAddress] = useState('');
+  const [code, setCode] = useState('');
+  const [requiredFields, setRequiredFields] = useState(["studentName"]);
+  const [requiredFieldsStaff, setrequiredFieldsStaff] = useState(["name"]);
+  const [currSchool,setcurrschool] = useState()
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const schoolId  = params ? params.id : null; // Assuming you have a route 
+  console.log(schoolId)
 
-  const handleChange = (e) => {
-    const { name, checked } = e.target;
-    if (checked) {
-      setRequiredFields((prevFields) => [...prevFields, name]);
-    } else {
-      setRequiredFields((prevFields) =>
-        prevFields.filter((field) => field !== name)
-      );
-    }
-  };
+  // Assuming you have stored the school data in your Redux store
+  const { schools, error } = useSelector((state) => state.user);
+  console.log(schools)
 
-  const handleStaffChange = (e) => {
-    const { name, checked } = e.target;
-    if (checked) {
-      setrequiredFieldsStaff((prevFields) => [...prevFields, name]);
-    } else {
-      setrequiredFieldsStaff((prevFields) =>
-        prevFields.filter((field) => field !== name)
-      );
+  useEffect(() => {
+    const schoolId  = params ? params.id : null;
+    if(schoolId){
+      let school = schools?.find((school) => school?._id == schoolId)
+      if(school){
+        setName(school?.name);
+        setEmail(school?.email);
+        setContact(school?.contact);
+        setAddress(school?.address);
+        setCode(school?.code);
+        setRequiredFields(school?.requiredFields);
+        setrequiredFieldsStaff(school?.requiredFieldsStaff);
+      }
     }
-  };
+  }, [schools]);
+
+  // if (currSchool) {
+  //   setName(currSchool.name);
+  //   setEmail(currSchool.email);
+  //   setContact(currSchool.contact);
+  //   address(currSchool.address);
+  //   setCode(currSchool.code);
+  //   setRequiredFields(currSchool.requiredFields);
+  //   setrequiredFieldsStaff(currSchool.requiredFieldsStaff);
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can use the state variables (name, email, etc.) to submit the form data
-    console.log(requiredFields);
-    console.log(requiredFieldsStaff);
-    const data = {
+    // Here you can use the state variables (name, email, etc.) to update the school data
+    const updatedSchoolData = {
       name,
       email,
       contact,
       address,
       code,
-      password,
-      confirmPassword,
       requiredFields,
       requiredFieldsStaff,
     };
-    console.log(data);
-    // Add your form submission logic here
-    const response = await dispatch(addSchool(data));
-    console.log(response);
-    if (response == "successfully Register") {
+    // Dispatch action to update school data
+    const response = await dispatch(updateSchool(updatedSchoolData,schoolId));
+    if(response == "School updated successfully"){
       toast.success(response, {
         position: "top-right",
         autoClose: 5000,
@@ -76,8 +78,8 @@ const AddSchool = () => {
         draggable: true,
         progress: undefined,
       });
-      router.push("/");
-    } else {
+      router.push("/SchoolList");
+    } else{
       toast.error(response, {
         position: "top-right",
         autoClose: 5000,
@@ -90,36 +92,55 @@ const AddSchool = () => {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    if (checked) {
+      setRequiredFields((prevFields) => [...prevFields, name]);
+    } else {
+      setRequiredFields((prevFields) => prevFields.filter((field) => field !== name));
+    }
+  };
+  
+  const handleStaffChange = (e) => {
+    const { name, checked } = e.target;
+    if (checked) {
+      setrequiredFieldsStaff((prevFields) => [...prevFields, name]);
+    } else {
+      setrequiredFieldsStaff((prevFields) => prevFields.filter((field) => field !== name));
+    }
+  };
+  
+
   return (
     <>
       <Nav />
       <section className="bg-white dark:bg-gray-900 py-10">
         <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
           <form className="w-full max-w-md" onSubmit={handleSubmit}>
-            <div className="flex items-center justify-center mt-6">
+          <div className="flex items-center justify-center mt-6">
               <a
                 href="#"
                 className="w-1/3 pb-4 font-medium text-center text-2xl text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400 dark:text-white"
               >
-                Add School
+                Edit School
               </a>
             </div>
             <div className="relative flex items-center mt-8">
               <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
               </span>
               <input
                 type="text"
@@ -131,20 +152,20 @@ const AddSchool = () => {
             </div>
             <div className="relative flex items-center mt-6">
               <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
               </span>
               <input
                 type="email"
@@ -180,20 +201,20 @@ const AddSchool = () => {
             </div>
             <div className="relative flex items-center mt-8">
               <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
               </span>
               <input
                 type="text"
@@ -203,61 +224,10 @@ const AddSchool = () => {
                 onChange={(e) => setCode(e.target.value)}
               />
             </div>
-            <div className="relative flex items-center mt-4">
-              <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-              </span>
-              <input
-                type="password"
-                className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="relative flex items-center mt-4">
-              <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-              </span>
-              <input
-                type="password"
-                className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <h2 className="mt-5 font-semibold text-xl ">
-              Student Required Fields
-            </h2>
+           
+            <h2 className='mt-5 font-semibold text-xl '>Student Required Fields</h2>
             <div className="mt-1 flex flex-col space-x-4">
-              <label
+            <label
                 htmlFor="studentName"
                 className="flex items-center space-x-2"
               >
@@ -427,14 +397,11 @@ const AddSchool = () => {
                 />
                 <span className="text-gray-600">Mode of Transport</span>
               </label>
-              {/* Add more checkboxes for additional fields here */}
             </div>
 
-            <h2 className="mt-5 font-semibold text-xl">
-              Staff Required Fields
-            </h2>
+            <h2 className='mt-5 font-semibold text-xl'>Staff Required Fields</h2>
             <div className="mt-1 flex flex-col space-x-4">
-              <label htmlFor="name" className="flex items-center space-x-2">
+            <label htmlFor="name" className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   id="name"
@@ -661,11 +628,11 @@ const AddSchool = () => {
                 <span className="text-gray-600">Belt No.</span>
               </label>
 
-              {/* Add more checkboxes for additional fields here */}
-            </div>
 
+              
+            </div>
             <button className="w-full px-6 py-3 mt-6 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-              Add School
+            Update School
             </button>
           </form>
         </div>
@@ -674,5 +641,4 @@ const AddSchool = () => {
   );
 };
 
-export default AddSchool;
-``
+export default EditSchool;

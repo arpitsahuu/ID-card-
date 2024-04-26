@@ -73,6 +73,8 @@ const Signup = () => {
             className="w-auto h-16 sm:h-8"
             src="/idcordlogo.jpg"
             alt=""
+            height={50}
+            width={50}
           />
         </div>
         <div className="flex items-center justify-center mt-6">
@@ -273,7 +275,7 @@ const Signup = () => {
           </button>
           <div className="mt-6 text-center ">
             <Link
-              href="/signin"
+              href="/Signin"
               className="text-sm text-indigo-600 hover:underline dark:text-blue-400"
             >
               Already have an account?
